@@ -111,53 +111,47 @@
 </div>
 
 <script>
+(function () {
   let targetWord = "";
   let currentGuess = "";
   let currentRow = 0;
   let gameReady = false;
-  let dictionarySet = new Set();
-  let dictionaryArray = [];
+  let dictionary = [];
 
-  // Load word list
+  // Load words
   fetch('words.txt')
-    .then(response => response.text())
+    .then(res => res.text())
     .then(text => {
-      dictionaryArray = text.split('\n')
-                            .map(w => w.trim().toUpperCase())
-                            .filter(w => w.length === 5);
-      dictionarySet = new Set(dictionaryArray);
-      targetWord = dictionaryArray[Math.floor(Math.random() * dictionaryArray.length)];
+      dictionary = text.split('\n')
+        .map(w => w.trim().toUpperCase())
+        .filter(w => w.length === 5);
+      targetWord = dictionary[Math.floor(Math.random() * dictionary.length)];
       gameReady = true;
-      console.log("Target word:", targetWord);
     });
 
   const board = document.getElementById("game-board");
 
-  // Create 6 rows × 5 columns = 30 tiles
   for (let i = 0; i < 30; i++) {
     const tile = document.createElement("div");
     tile.classList.add("tile");
-    tile.setAttribute("id", "tile-" + i);
+    tile.id = "tile-" + i;
     board.appendChild(tile);
   }
 
-  // Keyboard input
-  document.querySelectorAll(".key").forEach(btn => {
-    btn.addEventListener("click", () => handleKey(btn.innerText));
-  });
+  document.querySelectorAll(".key").forEach(btn =>
+    btn.addEventListener("click", () => handleKey(btn.innerText))
+  );
 
   function handleKey(key) {
     if (!gameReady) return;
 
     if (key === "Del") {
-      if (currentGuess.length > 0) {
-        currentGuess = currentGuess.slice(0, -1);
-        updateTile();
-      }
+      currentGuess = currentGuess.slice(0, -1);
+      updateTile();
     } else if (key === "Enter") {
       if (currentGuess.length === 5) {
         const guessUpper = currentGuess.toUpperCase();
-        if (!dictionarySet.has(guessUpper)) {
+        if (!dictionary.includes(guessUpper)) {
           alert("❗ Word not found in dictionary");
           return;
         }
@@ -175,17 +169,6 @@
     for (let i = 0; i < 5; i++) {
       const tile = document.getElementById("tile-" + (currentRow * 5 + i));
       tile.innerText = currentGuess[i] || "";
-    }
-  }
-
-  function colorKey(keyButton, status) {
-    if (!keyButton) return;
-    const priority = { absent: 1, present: 2, correct: 3 };
-    const current = keyButton.dataset.status;
-    if (!current || priority[status] > priority[current]) {
-      keyButton.classList.remove("correct", "present", "absent");
-      keyButton.classList.add(status);
-      keyButton.dataset.status = status;
     }
   }
 
@@ -217,9 +200,26 @@
     if (correctCount === 5) {
       setTimeout(() => alert("🎉 You win!"), 100);
     } else if (currentRow === 5) {
-      setTimeout(() => alert("❌ Game over! The word was: " + targetWord), 100);
+      setTimeout(() => alert("❌ Game over! Try again!"), 100); // Removed the word
     }
   }
+
+  function colorKey(keyBtn, status) {
+    if (!keyBtn) return;
+    if (status === "correct") {
+      keyBtn.style.backgroundColor = "green";
+      keyBtn.style.color = "white";
+    } else if (status === "present" && keyBtn.style.backgroundColor !== "green") {
+      keyBtn.style.backgroundColor = "gold";
+      keyBtn.style.color = "white";
+    } else if (status === "absent" && keyBtn.style.backgroundColor !== "green" && keyBtn.style.backgroundColor !== "gold") {
+      keyBtn.style.backgroundColor = "#777";
+      keyBtn.style.color = "white";
+    }
+  }
+})();
+</script>
+
 </script>
 </body>
 </html>
