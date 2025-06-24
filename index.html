@@ -2,16 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Wordle Clone</title>
   <style>
+    h1 {
+  font-size: 40px; /* Increase this value as needed */
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
     body {
       font-family: Arial, sans-serif;
       text-align: center;
       margin: 30px;
       background: #f4f4f4;
     }
+    .key-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;  /* ❌ disables wrapping */
+  gap: 5px;            /* optional: keeps spacing tidy */
+}
 
+    #quit-button {
+      transform: scale(0.8);
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 8px;
+      background-color: #ff4d4d;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
     #game-board {
+      
+      transform: scale(0.8);
       display: grid;
       grid-template-columns: repeat(5, 60px);
       grid-template-rows: repeat(6, 60px);
@@ -19,7 +45,7 @@
       justify-content: center;
       margin: 0 auto 30px;
     }
-
+  
     .tile {
       width: 60px;
       height: 60px;
@@ -31,32 +57,35 @@
       border-radius: 10px;
       background-color: white;
     }
-
+  
     .correct {
       background-color: green;
       color: white;
     }
-
+  
     .present {
       background-color: gold;
       color: white;
     }
-
+  
     .absent {
       background-color: #777;
       color: white;
     }
-
+  
     #keyboard {
+      margin-bottom: 0px;
+      margin-top: -40px;
+      transform: scale(0.8);
       display: flex;
       flex-direction: column;
       align-items: center;
     }
-
+  
     .key-row {
       margin: 5px;
     }
-
+  
     .key {
       padding: 10px 12px;
       margin: 3px;
@@ -67,37 +96,72 @@
       cursor: pointer;
       font-weight: bold;
     }
-
+  
     .key.correct {
       background-color: green;
       color: white;
     }
-
+  
     .key.present {
       background-color: gold;
       color: white;
     }
-
+  
     .key.absent {
       background-color: #777;
       color: white;
     }
+  
+    @media (max-width: 400px) {
+  h1 {
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 15px;
+  }
 
-    #quit-button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 18px;
-      border-radius: 8px;
-      background-color: #ff4d4d;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
+  #game-board {
+    transform: scale(0.7);
+    transform-origin: top center;
+    margin-top: 0px;
+    margin-bottom: -70px;
+  }
+
+  #keyboard {
+    transform: scale(0.87);
+    transform-origin: top center;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  #quit-button {
+    transform: scale(0.8);
+    margin-top: 10px;
+  }
+
+  .key {
+    font-size: 16px;
+    padding: 8px 10px;
+  }
+
+  .key-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;  /* prevent wrapping */
+    gap: 4px;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+}
+
+
   </style>
+  
 </head>
 <body>
 
-<h1>Wordle Clone</h1>
+<h1>Wordle Game</h1>
 <div id="game-board"></div>
 
 <div id="keyboard">
