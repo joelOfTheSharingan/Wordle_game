@@ -262,10 +262,21 @@
       } else if (key === "Enter") {
         if (currentGuess.length === 5) {
           const guessUpper = currentGuess.toUpperCase();
-          if (!dictionary.includes(guessUpper)) {
-            alert("❗ Word not found in dictionary");
-            return;
-          }
+          // New check using API instead of local dictionary
+fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${guessUpper}`)
+  .then(res => {
+    if (!res.ok) throw new Error();
+    return res.json();
+  })
+  .then(() => {
+    checkGuess();
+    currentGuess = "";
+    currentRow++;
+  })
+  .catch(() => {
+    alert("❗ Word not found in dictionary");
+  });
+
           checkGuess();
           currentGuess = "";
           currentRow++;
