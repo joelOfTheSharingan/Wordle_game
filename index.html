@@ -254,21 +254,18 @@
     });
   
     function handleKey(key) {
-      if (!gameReady) return;
-  
-      if (key === "Del") {
-        currentGuess = currentGuess.slice(0, -1);
-        updateTile();
-      } else if (key === "Enter") {
-        if (currentGuess.length === 5) {
-          const guessUpper = currentGuess.toUpperCase();
-          // New check using API instead of local dictionary
-fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${guessUpper}`)
-  .then(res => {
-    if (!res.ok) throw new Error();
-    return res.json();
-  })
-  .then(() => {
+    if (!gameReady) return;
+
+    if (key === "Del") {
+      currentGuess = currentGuess.slice(0, -1);
+      updateTiles();
+    } else if (key === "Enter") {
+      if (currentGuess.length === WORD_LENGTH) {
+        const guessUpper = currentGuess.toUpperCase();
+        if (!dictionary.includes(guessUpper)) {
+          alert("❗ Word not found in dictionary");
+          return;
+        }
     checkGuess();
     currentGuess = "";
     currentRow++;
